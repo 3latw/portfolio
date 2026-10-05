@@ -8,7 +8,7 @@ export const profile = {
   email: '3latawalbeh@gmail.com',
   cvUrl: '/files/Alaa-Ziad-Tawalbeh-CV.pdf',
   heroVideo: '/media/IMG_673ppppp2.MP4' as string | null,
-  heroPoster: null as string | null,
+  heroPoster: '/media/alaa-portrait.jpg',
 }
 
 export type Project = {

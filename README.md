@@ -45,6 +45,8 @@ Add records to `projects` in `src/data.ts`. Only `status: 'published'` appears. 
 
 The replacement video is portrait (720 × 1280, ~7 seconds). On desktop it sits on the right against a matching orange background with blended edges, keeping the person visible. Mobile uses full-screen cover with a readability overlay. The original supplied file is preserved unchanged.
 
+An eagerly loaded JPEG extracted from the video is always underneath it. Video stays transparent until a decoded frame is available, and the still remains visible if video loading fails or is delayed. On mobile the media is positioned inside the hero, avoiding fixed-background compositing issues. Scrubbing initializes from metadata, so it does not depend on mobile browsers eagerly buffering the video.
+
 `useTypewriter` follows the provided 38 ms speed and 600 ms start delay. Pills animate after 400 ms independently of typing. Mobile navigation supports Escape, focus cycling and scroll locking.
 
 The requested Helvetica Now stylesheet URLs are loaded from `index.html`, with Helvetica Neue / Arial fallbacks when the external service is unavailable. Ensure appropriate font licensing for public production use.

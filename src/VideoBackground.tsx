@@ -8,6 +8,7 @@ export default function VideoBackground() {
   const seekRef = useRef<(value: number) => void>(() => {})
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [hasFrame, setHasFrame] = useState(false)
   const [position, setPosition] = useState(50)
 
   useEffect(() => {
@@ -22,16 +23,21 @@ export default function VideoBackground() {
     const maxTime = () => Math.max(0, video.duration - .04)
     const seek = () => {
       frame = 0
-      if (disposed || document.hidden || video.seeking || !initialized || video.readyState < 2) return
+      if (disposed || document.hidden || video.seeking || !initialized || video.readyState < 1) return
       if (Math.abs(video.currentTime - targetTime) > .025) video.currentTime = targetTime
     }
     const schedule = () => { if (!frame) frame = requestAnimationFrame(seek) }
     const loaded = () => {
+      if (initialized) return
       if (!Number.isFinite(video.duration) || video.duration <= 0) { setFailed(true); return }
       initialized = true
       video.pause()
       targetTime = maxTime() * .5
       setReady(true)
+      schedule()
+    }
+    const frameAvailable = () => {
+      if (video.readyState >= 2) setHasFrame(true)
       schedule()
     }
     const mousemove = (event: MouseEvent) => {
@@ -51,19 +57,22 @@ export default function VideoBackground() {
       setPosition(value)
       schedule()
     }
-    video.addEventListener('loadeddata', loaded)
-    video.addEventListener('seeked', schedule)
+    video.addEventListener('loadedmetadata', loaded)
+    video.addEventListener('loadeddata', frameAvailable)
+    video.addEventListener('seeked', frameAvailable)
     window.addEventListener('mousemove', mousemove, { passive: true })
     window.addEventListener('blur', resetPointer)
     document.addEventListener('mouseleave', resetPointer)
     document.addEventListener('visibilitychange', visibility)
     motion.addEventListener('change', resetPointer)
-    if (video.readyState >= 2) loaded()
+    if (video.readyState >= 1) loaded()
+    if (video.readyState >= 2) frameAvailable()
     return () => {
       disposed = true
       cancelAnimationFrame(frame)
-      video.removeEventListener('loadeddata', loaded)
-      video.removeEventListener('seeked', schedule)
+      video.removeEventListener('loadedmetadata', loaded)
+      video.removeEventListener('loadeddata', frameAvailable)
+      video.removeEventListener('seeked', frameAvailable)
       window.removeEventListener('mousemove', mousemove)
       window.removeEventListener('blur', resetPointer)
       document.removeEventListener('mouseleave', resetPointer)
@@ -75,7 +84,8 @@ export default function VideoBackground() {
 
   return <>
     <div className="video-background" aria-hidden="true">
-      <video ref={videoRef} src={profile.heroVideo ?? undefined} poster={profile.heroPoster ?? undefined} muted playsInline preload="auto" onError={() => setFailed(true)} className={failed ? 'video-failed' : ''} />
+      <img className="portrait-poster" src={profile.heroPoster} alt="" loading="eager" fetchPriority="high" width="720" height="1280" />
+      <video ref={videoRef} src={profile.heroVideo ?? undefined} poster={profile.heroPoster} muted playsInline preload="metadata" onError={() => setFailed(true)} className={hasFrame && !failed ? 'video-visible' : 'video-pending'} />
       <div className="video-shade" />
     </div>
     {ready && !failed && <div className="portrait-control">

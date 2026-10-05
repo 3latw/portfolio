@@ -25,8 +25,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .mobile-overlay { display: none; }
 .hero { position: relative; min-height: 760px; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 100px 40px; }
 .video-background { position: fixed; inset: 0; z-index: 0; background: #eba322; pointer-events: none; }
-.video-background video { position: absolute; top: 0; right: 7%; height: 100%; width: min(58vw, 56.25vh); object-fit: cover; object-position: 70% center; mask-image: linear-gradient(to right, transparent, #000 12%, #000 92%, transparent); }
-.video-failed { opacity: 0; }
+.video-background video, .portrait-poster { position: absolute; top: 0; right: 7%; height: 100%; width: min(58vw, 56.25vh); object-fit: cover; object-position: 70% center; mask-image: linear-gradient(to right, transparent, #000 12%, #000 92%, transparent); }
+.video-pending { opacity: 0; }
+.video-visible { opacity: 1; }
 .video-shade { position: absolute; inset: 0; background: linear-gradient(90deg, #51320738, #51320712 45%, transparent 65%); }
 .hero-content { width: 610px; max-width: 54%; position: relative; z-index: 1; }
 .hero-name { font-size: clamp(56px, 6.4vw, 88px); font-weight: 400; line-height: .96; letter-spacing: -.055em; margin: 0 0 20px; }
@@ -146,7 +147,8 @@ h3 { font-weight: 400; }
  .personal-link { font-size: 19px; gap: 14px; }
  .personal-label { width: 38px; font-size: 10px; }
  .hero-social { font-size: 19px; gap: 25px; }
- .video-background video { right: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; mask-image: none; }
+ .video-background { position: absolute; }
+ .video-background video, .portrait-poster { right: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; mask-image: none; -webkit-mask-image: none; }
  .video-shade { background: linear-gradient(to bottom, #22140324 8%, #22140366 35%, #221403b0 100%); }
  .blurred-intro { margin-bottom: 20px; font-size: 20px; }
  .typewriter { min-height: 68px; font-size: 16px; margin-bottom: 15px; }
@@ -182,5 +184,5 @@ h3 { font-weight: 400; }
  .desktop-break { display: none; }
 }
 @media (min-width: 640px) and (max-width: 767px) { .header { padding: 20px 32px; } .hero { padding-inline: 32px; } .brand { font-size: 26px; } .pill { font-size: 15px; } }
-@media (max-width: 767px) and (min-aspect-ratio: 1/1) { .video-background video { object-position: 70% top; } }
+@media (max-width: 767px) and (min-aspect-ratio: 1/1) { .video-background video, .portrait-poster { object-position: 70% top; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } .will-reveal { opacity: 1; transform: none; } .typing-cursor { display: none; } .mouse-hint { display: none; } .touch-hint { display: inline; } }
