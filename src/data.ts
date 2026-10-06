@@ -6,9 +6,9 @@ export const profile = {
   phone: '+962 795333908',
   phoneHref: 'tel:+962795333908',
   email: '3latawalbeh@gmail.com',
-  cvUrl: '/files/Alaa-Ziad-Tawalbeh-CV.pdf',
-  heroVideo: '/media/IMG_673ppppp2.MP4' as string | null,
-  heroPoster: '/media/alaa-portrait.jpg',
+  cvUrl: `${import.meta.env.BASE_URL}files/Alaa-Ziad-Tawalbeh-CV.pdf`,
+  heroVideo: `${import.meta.env.BASE_URL}media/IMG_673ppppp2.MP4` as string | null,
+  heroPoster: `${import.meta.env.BASE_URL}media/alaa-portrait.jpg`,
 }
 
 export type Project = {
